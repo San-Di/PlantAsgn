@@ -1,0 +1,6 @@
+framework module Pods_PlantAsgn {
+  umbrella header "Pods-PlantAsgn-umbrella.h"
+
+  export *
+  module * { export * }
+}
