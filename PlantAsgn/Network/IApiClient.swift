@@ -15,4 +15,8 @@ import RealmSwift
 protocol IApiClient {
     func getAllPlants() -> Observable<GetAllPlantsResponse>
     func saveFavPlant(data : PlantVO, realm : Realm) -> Observable<PlantVO>
+    func login(email: String, password: String) -> Observable<LoginResponse>
+    func getFavourites() -> Observable<[PlantVO]>
+    
+    func removeFavById(id: String) -> Observable<String>
 }

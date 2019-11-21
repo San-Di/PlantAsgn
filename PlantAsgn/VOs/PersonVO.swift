@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class PersonVO: Object{
+class PersonVO: Object, Codable{
      @objc dynamic var name: String = ""
      @objc dynamic var user_photo: String = ""
      @objc dynamic var uploaded_time: String = ""

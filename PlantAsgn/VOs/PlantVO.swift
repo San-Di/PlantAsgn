@@ -9,14 +9,15 @@
 import Foundation
 import RealmSwift
 
-
 class PlantVO: Object, Codable {
-    @objc dynamic var plant_id: String = ""
-    @objc dynamic var plant_name: String = ""
+    @objc dynamic var plant_id: String?
+    @objc dynamic var plant_name: String?
 //    @objc dynamic var plant_type: [String] = []
-//    @objc dynamic var description: String = ""
-    @objc dynamic var top_tip: String = ""
-    @objc dynamic var plant_photo: String = ""
+//    @objc dynamic var description: String?
+    @objc dynamic var top_tip: String?
+    @objc dynamic var plant_photo: String?
+    @objc dynamic var uploaded_user: PersonVO?
+    @objc dynamic var tips: PlantTipVO?
     
     override static func primaryKey() -> String?{
         return "plant_id"

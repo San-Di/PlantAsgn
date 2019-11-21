@@ -83,6 +83,8 @@ open class BaseApiClient {
             plantVO.plant_name = data.plant_name
             plantVO.plant_photo = data.plant_photo
             plantVO.top_tip = data.top_tip
+            plantVO.uploaded_user = data.uploaded_user
+            plantVO.tips = data.tips
             
             do{
                 try realm.write {

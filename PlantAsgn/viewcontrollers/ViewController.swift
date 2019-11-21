@@ -16,12 +16,16 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var tableViewPlantList: UITableView!
     
+    @IBOutlet weak var imgBackground: UIImageView!
+    
     let bag = DisposeBag()
     var mPlantList: [PlantVO] = []
     private let viewModel = PlantListViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        imgBackground.layer.cornerRadius = 30
+        imgBackground.layer.maskedCorners = [.layerMinXMaxYCorner]
         
         tableViewPlantList.register(UINib(nibName: String(describing: PlantItemTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: PlantItemTableViewCell.self))
         
@@ -32,23 +36,28 @@ class ViewController: UIViewController {
     }
 
     private func initDataObservation(){
-//        viewModel.catObs.observeOn(MainScheduler.instance)
-//            .subscribe(onNext: {
-//                data in
-//                print("data => \(data)")
-//    //                    self.bindCategory(category: data)
-//        }).disposed(by: bag)
-        
-        viewModel.catObs.observeOn(MainScheduler.instance)
+        viewModel.plantListObs.observeOn(MainScheduler.instance)
                     .bind(to: tableViewPlantList.rx.items) {
                         tableView, index, item in
                         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: PlantItemTableViewCell.self), for: IndexPath(row: index, section: 0)) as! PlantItemTableViewCell
                         
                         cell.mData = item
-                        
-        //                cell.heightAnchor = NSLayoutAnchor(
                         return cell
                 }.disposed(by: bag)
+        
+        Observable
+            .zip(tableViewPlantList.rx.itemSelected, tableViewPlantList.rx.modelSelected(PlantVO.self))
+            .bind{
+                indexPath, model in
+                self.tableViewPlantList.deselectRow(at: indexPath, animated: true)
+                print("Selected " + (model.plant_name ?? "") + " at \(indexPath)")
+                
+                guard let plantDetailVC = self.storyboard?.instantiateViewController(identifier: String(describing: DetailViewController.self)) as? DetailViewController else {
+                    fatalError("Detail view controller is not found in Storyboard!")
+                }
+                plantDetailVC.plantVoDetail = model
+                self.navigationController?.pushViewController(plantDetailVC, animated: true)
+        }.disposed(by: bag)
     }
     
     func bindPlantList(plantList: [PlantVO]){

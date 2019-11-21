@@ -10,9 +10,19 @@ import UIKit
 
 class FavCategoryCollectionViewCell: UICollectionViewCell {
 
+    @IBOutlet weak var viewContentFavCategoruy: UIView!
+    
+    @IBOutlet weak var lblFavCategory: UILabel!
+    
+    var mData: String? {
+        didSet{
+            lblFavCategory.text = mData ?? ""
+        }
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        viewContentFavCategoruy.layer.cornerRadius = 15
     }
 
 }

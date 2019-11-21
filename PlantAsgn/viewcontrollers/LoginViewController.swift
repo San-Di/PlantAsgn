@@ -7,24 +7,56 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class LoginViewController: UIViewController {
+
+    @IBOutlet weak var txtFieldEmail: UITextField!
+    @IBOutlet weak var txtFieldPassword: UITextField!
+    @IBOutlet weak var viewEmail: CardView!
+    
+    @IBOutlet weak var viewPassword: CardView!
+    
+    @IBOutlet weak var btnLogin: UIButton!
+
+    let bag = DisposeBag()
+    private let viewModel = PlantListViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        viewEmail.layer.cornerRadius = 25
+        txtFieldEmail.borderStyle = .none
+        viewEmail.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        
+        viewPassword.layer.cornerRadius = 25
+        txtFieldPassword.borderStyle = .none
+        viewPassword.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        
+        btnLogin.layer.cornerRadius = 25
+        btnLogin.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+    }
+
+    @IBAction func btnLogin(_ sender: Any) {
+        let email = txtFieldEmail.text ?? ""
+        let password = txtFieldPassword.text ?? ""
+        
+        viewModel.requestLogin(email: email, password: password)
+        
+        
+        viewModel.loginUserObs.observeOn(MainScheduler.instance)
+            .subscribe(onNext: {
+                data in
+                print("login data !!!! \(data.user_name)")
+                UserDefaults.standard.set(data.user_name, forKey: "user_name")
+                
+                
+                guard let mainVC = self.storyboard?.instantiateViewController(identifier: String(describing: SideMenuViewController.self)) as? SideMenuViewController else {
+                    fatalError("Main view controller is not found in Storyboard!")
+                }
+                self.navigationController?.pushViewController(mainVC, animated: true)
+            }).disposed(by: bag)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

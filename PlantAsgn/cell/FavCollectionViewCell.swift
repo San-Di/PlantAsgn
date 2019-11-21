@@ -2,25 +2,27 @@
 //  FavCollectionViewCell.swift
 //  PlantAsgn
 //
-//  Created by Sandi on 11/16/19.
+//  Created by Sandi on 11/20/19.
 //  Copyright © 2019 Sandi. All rights reserved.
 //
 
 import UIKit
-import RxSwift
 import SDWebImage
-
 class FavCollectionViewCell: UICollectionViewCell {
 
-    @IBOutlet weak var imgFavPlant: UIImageView!
+    @IBOutlet weak var imgfav: UIImageView!
     
-    var mData: PlantVO?{
+    @IBOutlet weak var viewContentFav: UIView!
+    
+    var mData: String? {
         didSet{
-            imgFavPlant.sd_setImage(with: URL(string: mData?.plant_photo ?? ""), completed: nil)
+            imgfav.sd_setImage(with: URL(string: mData ?? ""), completed: nil)
         }
     }
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        viewContentFav.layer.cornerRadius = 20
     }
 
 }
